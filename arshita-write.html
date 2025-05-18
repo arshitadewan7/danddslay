@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Write for Arshita</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>📝 Write in Arshita’s Diary</h1>
+  <a href="arshita.html" class="write-link">📚 See past entries</a>
+
+  <form id="entryForm">
+    <textarea id="entryText" placeholder="Write your thoughts here..." required></textarea>
+    <br>
+    <button type="submit">Add Entry</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("entryForm");
+    const entryText = document.getElementById("entryText");
+    const storageKey = "ArshitaEntries";
+
+    function getFormattedDate() {
+      const now = new Date();
+      const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const day = days[now.getDay()];
+      const date = now.toISOString().split("T")[0];
+      return { date, day };
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const { date, day } = getFormattedDate();
+      const newEntry = {
+        date,
+        day,
+        text: entryText.value
+      };
+
+      const entries = JSON.parse(localStorage.getItem(storageKey)) || [];
+      entries.unshift(newEntry);
+      localStorage.setItem(storageKey, JSON.stringify(entries));
+      entryText.value = "";
+      alert("✨ Entry added! Go back to read it.");
+    });
+  </script>
+</body>
+</html>

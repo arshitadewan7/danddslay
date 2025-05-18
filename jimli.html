@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jimli's Diary</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>📖 Jimli’s Diary</h1>
+  
+  <a href="index.html" class="home-link">🏠 Back to Home</a>
+  <a href="jimli-write.html" class="write-link">➕ Write a new entry</a>
+
+  <div id="entries"></div>
+
+  <script>
+    const entriesDiv = document.getElementById("entries");
+    const storageKey = "jimliEntries";
+
+    function loadEntries() {
+      const entries = JSON.parse(localStorage.getItem(storageKey)) || [];
+      entriesDiv.innerHTML = "";
+      entries.forEach(entry => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <em>jimli's entry</em>
+          <h3>${entry.day}, ${entry.date}</h3>
+          <p>${entry.text}</p>
+        `;
+        entriesDiv.appendChild(div);
+      });
+    }
+
+    loadEntries();
+  </script>
+</body>
+</html>
