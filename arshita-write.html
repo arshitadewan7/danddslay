@@ -4,9 +4,13 @@
   <meta charset="UTF-8" />
   <title>Write for Arshita</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Add Supabase JS library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Add our Supabase config -->
+  <script src="supabase-config.js"></script>
 </head>
 <body>
-  <h1>📝 Write in Arshita’s Diary</h1>
+  <h1>📝 Write in Arshita's Diary</h1>
   <a href="arshita.html" class="write-link">📚 See past entries</a>
 
   <form id="entryForm">
@@ -18,7 +22,7 @@
   <script>
     const form = document.getElementById("entryForm");
     const entryText = document.getElementById("entryText");
-    const storageKey = "ArshitaEntries";
+    const userId = "arshita"; // Unique identifier for Arshita's entries
 
     function getFormattedDate() {
       const now = new Date();
@@ -28,7 +32,7 @@
       return { date, day };
     }
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const { date, day } = getFormattedDate();
       const newEntry = {
@@ -37,11 +41,14 @@
         text: entryText.value
       };
 
-      const entries = JSON.parse(localStorage.getItem(storageKey)) || [];
-      entries.unshift(newEntry);
-      localStorage.setItem(storageKey, JSON.stringify(entries));
-      entryText.value = "";
-      alert("✨ Entry added! Go back to read it.");
+      const result = await saveDiaryEntry(userId, newEntry);
+      
+      if (result.success) {
+        entryText.value = "";
+        alert("✨ Entry added! Go back to read it.");
+      } else {
+        alert("❌ Error saving entry. Please try again.");
+      }
     });
   </script>
 </body>
